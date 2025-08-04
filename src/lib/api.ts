@@ -2,9 +2,14 @@ import axios from 'axios'
 import Fuse from 'fuse.js'
 import type { Candidate, FuseSearchResult } from './types'
 
-const MINIO_CONFIG = {
-  endpoint: 'http://localhost:9000',
-  bucket: 'candidates2',
+// const CONFIG = {
+//   endpoint: 'http://localhost:9000',
+//   bucket: 'candidates2',
+//   indexFile: 'fuse-index.json',
+// }
+const CONFIG = {
+  endpoint: 'https://s3.eu-north-1.amazonaws.com',
+  bucket: 'ee-test-elections-worker',
   indexFile: 'fuse-index.json',
 }
 
@@ -17,7 +22,7 @@ const api = axios.create({
 
 export const fetchCandidates = async (): Promise<Array<Candidate>> => {
   try {
-    const url = `${MINIO_CONFIG.endpoint}/${MINIO_CONFIG.bucket}/${MINIO_CONFIG.indexFile}`
+    const url = `${CONFIG.endpoint}/${CONFIG.bucket}/${CONFIG.indexFile}`
 
     const response = await api.get(url)
 
@@ -64,7 +69,7 @@ export const fetchCandidateDetails = async (
 ): Promise<any> => {
   try {
     // candidateFileName looks like "CANDIDATES/ANTI KALJUMÄE.json"
-    const url = `${MINIO_CONFIG.endpoint}/${MINIO_CONFIG.bucket}/${candidateFileName}`
+    const url = `${CONFIG.endpoint}/${CONFIG.bucket}/${candidateFileName}`
 
     console.log('🔄 Fetching candidate details from:', url)
 
