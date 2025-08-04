@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { Users } from 'lucide-react'
+import { ChevronDown, Users } from 'lucide-react'
 import React, { useMemo, useState } from 'react'
 import { cn } from '../lib/utils'
 import { SearchInput } from './SearchInput'
@@ -103,62 +103,75 @@ export const CandidatesTable: React.FC = () => {
       />
 
       {/* Table */}
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[60px]">#</TableHead>
-              <TableHead className="w-[100px]">Kandidaadi nimi</TableHead>
-              <TableHead className="w-[60px]">Vanus</TableHead>
-              <TableHead className="w-[80px]">Haridus</TableHead>
-              <TableHead className="w-[60px]">2021 hääled</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {searchResults.size === 0 ? (
-              <TableRow>
-                <TableCell
-                  colSpan={searchQuery ? 4 : 3}
-                  className="h-24 text-center"
-                >
-                  {searchQuery
-                    ? 'No candidates found matching your search.'
-                    : 'No candidates available.'}
-                </TableCell>
-              </TableRow>
-            ) : (
-              <>
-                {Array.from(searchResults.entries()).map(
-                  ([district, adminUnits]: [
-                    string,
-                    Map<string, Array<Candidate>>,
-                  ]) => {
-                    return (
-                      <div key={district}>
-                        <h2 className="text-3xl font-semibold">{district}</h2>
+      <div className="rounded-md border p-8">
+        {searchResults.size === 0 ? (
+          <TableRow>
+            <TableCell
+              colSpan={searchQuery ? 4 : 3}
+              className="h-24 text-center"
+            >
+              {searchQuery
+                ? 'No candidates found matching your search.'
+                : 'No candidates available.'}
+            </TableCell>
+          </TableRow>
+        ) : (
+          <>
+            {Array.from(searchResults.entries()).map(
+              ([district, adminUnits]: [
+                string,
+                Map<string, Array<Candidate>>,
+              ]) => {
+                return (
+                  <div key={district}>
+                    <h2 className="text-3xl font-semibold">{district}</h2>
 
-                        {Array.from(adminUnits.entries()).map(
-                          ([adminUnit, parties]: [any, any]) => {
-                            return (
-                              <>
-                                <h2 className="text-lg opacity-80">
-                                  {adminUnit}
-                                </h2>
+                    {Array.from(adminUnits.entries()).map(
+                      ([adminUnit, parties]: [any, any]) => {
+                        return (
+                          <>
+                            <h2 className="text-lg opacity-80 mb-5">
+                              {adminUnit}
+                            </h2>
 
-                                {Array.from(parties.entries()).map(
-                                  ([partyName, candidates]: any) => (
-                                    <div key={partyName}>
-                                      <h3
-                                        className={cn(
-                                          'text-2xl',
-                                          getPartyColor(partyName),
-                                        )}
-                                      >
-                                        {partyName} ({candidates.length})
-                                      </h3>
+                            {Array.from(parties.entries()).map(
+                              ([partyName, candidates]: any) => (
+                                <div key={partyName}>
+                                  <h3
+                                    className={cn(
+                                      'text-2xl',
+                                      getPartyColor(partyName),
+                                    )}
+                                  >
+                                    {partyName} ({candidates.length})
+                                  </h3>
+                                  <Table>
+                                    <TableHeader>
+                                      <TableRow>
+                                        <TableHead className="w-[60px]">
+                                          #
+                                        </TableHead>
+                                        <TableHead className="w-[100px]">
+                                          Kandidaadi nimi
+                                        </TableHead>
+                                        <TableHead className="w-[60px]">
+                                          Vanus
+                                        </TableHead>
+                                        <TableHead className="w-[80px]">
+                                          Haridus
+                                        </TableHead>
+                                        <TableHead className="w-[60px]">
+                                          2021 hääled
+                                        </TableHead>
+                                        <TableHead className="w-[60px]">
+                                          Lisainfo
+                                        </TableHead>
+                                      </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
                                       {candidates.map(
                                         (candidate: any, index: any) => {
-                                          if (index > 4) {
+                                          if (index >= 2) {
                                             return <></>
                                           }
                                           return (
@@ -196,25 +209,28 @@ export const CandidatesTable: React.FC = () => {
                                                   {candidate.lastNumberOfVotes}
                                                 </Badge>
                                               </TableCell>
+                                              <TableCell className="font-medium">
+                                                <ChevronDown />
+                                              </TableCell>
                                             </TableRow>
                                           )
                                         },
                                       )}
-                                    </div>
-                                  ),
-                                )}
-                              </>
-                            )
-                          },
-                        )}
-                      </div>
-                    )
-                  },
-                )}
-              </>
+                                    </TableBody>
+                                  </Table>
+                                </div>
+                              ),
+                            )}
+                          </>
+                        )
+                      },
+                    )}
+                  </div>
+                )
+              },
             )}
-          </TableBody>
-        </Table>
+          </>
+        )}
       </div>
 
       {/* Pagination info */}
