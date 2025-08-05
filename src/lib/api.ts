@@ -180,10 +180,7 @@ export const searchCandidates = (
 
   const data = fuse.search(query)
 
-  console.log('fuse data', data)
-
   const results = groupResults(data)
-  console.log('grouped', results)
 
   return results
 }

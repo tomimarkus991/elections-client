@@ -30,12 +30,9 @@ export const CandidatesTable: React.FC = () => {
   })
 
   const searchResults = useMemo(() => {
-    console.log('searching', s3Candidates)
-
     if (!searchQuery) return new Map()
 
     const results = searchCandidates(s3Candidates, searchQuery)
-    console.log('res', results)
 
     return results
   }, [s3Candidates, searchQuery])
@@ -78,8 +75,6 @@ export const CandidatesTable: React.FC = () => {
       </Alert>
     )
   }
-
-  console.log('seaaaaa', searchResults)
 
   return (
     <div className="space-y-6">
