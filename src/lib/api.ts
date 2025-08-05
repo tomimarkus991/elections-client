@@ -24,17 +24,7 @@ const s3Client = new S3Client({
     accessKeyId: env.VITE_S3_ACCESS_KEY,
     secretAccessKey: env.VITE_S3_SECRET_KEY,
   },
-  // You can omit credentials if using presigned URLs from your backend
 })
-
-// // env-specific stream with added mixin methods.
-// const bodyStream = getObjectResult.Body
-
-// // one-time transform.
-// const bodyAsString = await bodyStream.transformToString()
-
-// // throws an error on 2nd call, stream cannot be rewound.
-// const __error__ = await bodyStream.transformToString()
 
 const api = axios.create({
   timeout: 30000,
