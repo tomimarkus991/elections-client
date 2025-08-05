@@ -1,49 +1,52 @@
-import React, { useCallback, useState } from 'react';
-import { Search, X } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/utils';
+import React, { useCallback, useState } from 'react'
+import { Search, X } from 'lucide-react'
+import { cn } from '../lib/utils'
+import { Input } from '../components/ui/input'
 
 interface SearchInputProps {
-  onSearch: (query: string) => void;
-  placeholder?: string;
-  className?: string;
-  debounceMs?: number;
+  onSearch: (query: string) => void
+  placeholder?: string
+  className?: string
+  debounceMs?: number
 }
 
 export const SearchInput: React.FC<SearchInputProps> = ({
   onSearch,
-  placeholder = "Search candidates...",
+  placeholder = 'Search candidates...',
   className,
-  debounceMs = 300
+  debounceMs = 300,
 }) => {
-  const [query, setQuery] = useState('');
-  const [debounceTimer, setDebounceTimer] = useState<any | null>(null);
+  const [query, setQuery] = useState('')
+  const [debounceTimer, setDebounceTimer] = useState<any | null>(null)
 
-  const debouncedSearch = useCallback((value: string) => {
-    if (debounceTimer) {
-      clearTimeout(debounceTimer);
-    }
+  const debouncedSearch = useCallback(
+    (value: string) => {
+      if (debounceTimer) {
+        clearTimeout(debounceTimer)
+      }
 
-    const timer = setTimeout(() => {
-      onSearch(value);
-    }, debounceMs);
+      const timer = setTimeout(() => {
+        onSearch(value)
+      }, debounceMs)
 
-    setDebounceTimer(timer);
-  }, [onSearch, debounceMs, debounceTimer]);
+      setDebounceTimer(timer)
+    },
+    [onSearch, debounceMs, debounceTimer],
+  )
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setQuery(value);
-    debouncedSearch(value);
-  };
+    const value = e.target.value
+    setQuery(value)
+    debouncedSearch(value)
+  }
 
   const clearSearch = () => {
-    setQuery('');
-    onSearch('');
-  };
+    setQuery('')
+    onSearch('')
+  }
 
   return (
-    <div className={cn("relative", className)}>
+    <div className={cn('relative', className)}>
       <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
       <Input
         type="text"
@@ -61,5 +64,5 @@ export const SearchInput: React.FC<SearchInputProps> = ({
         </button>
       )}
     </div>
-  );
-};
+  )
+}

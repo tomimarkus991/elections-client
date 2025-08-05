@@ -1,12 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
-import { ChevronDown, Users } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 import React, { useMemo, useState } from 'react'
+import { fetchCandidates, searchCandidates } from '../lib/api'
 import { cn } from '../lib/utils'
 import { SearchInput } from './SearchInput'
-import type { Candidate, FuseSearchResult } from '../lib/types'
-import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Badge } from '@/components/ui/badge'
-import { LoadingSpinner } from '@/components/ui/loading-spinner'
+import { LoadingSpinner } from './ui/loading-spinner'
 import {
   Table,
   TableBody,
@@ -14,8 +12,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
-import { fetchCandidates, searchCandidates } from '@/lib/api'
+} from './ui/table'
+import { Badge } from './ui/badge'
+import { Alert, AlertDescription } from './ui/alert'
+import type { Candidate } from '../lib/types'
 
 export const CandidatesTable: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('Haa')
