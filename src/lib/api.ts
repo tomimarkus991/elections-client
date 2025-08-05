@@ -1,5 +1,8 @@
 import axios from 'axios'
 import Fuse from 'fuse.js'
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
+import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
+import { env } from '../env'
 import type { Candidate, FuseSearchResult } from './types'
 
 // const CONFIG = {
@@ -7,11 +10,31 @@ import type { Candidate, FuseSearchResult } from './types'
 //   bucket: 'candidates2',
 //   indexFile: 'fuse-index.json',
 // }
+
 const CONFIG = {
   endpoint: 'https://s3.eu-north-1.amazonaws.com',
   bucket: 'ee-test-elections-worker',
   indexFile: 'fuse-index.json',
+  region: 'eu-north-1',
 }
+
+const s3Client = new S3Client({
+  region: CONFIG.region,
+  credentials: {
+    accessKeyId: env.VITE_S3_ACCESS_KEY,
+    secretAccessKey: env.VITE_S3_SECRET_KEY,
+  },
+  // You can omit credentials if using presigned URLs from your backend
+})
+
+// // env-specific stream with added mixin methods.
+// const bodyStream = getObjectResult.Body
+
+// // one-time transform.
+// const bodyAsString = await bodyStream.transformToString()
+
+// // throws an error on 2nd call, stream cannot be rewound.
+// const __error__ = await bodyStream.transformToString()
 
 const api = axios.create({
   timeout: 30000,
@@ -22,7 +45,16 @@ const api = axios.create({
 
 export const fetchCandidates = async (): Promise<Array<Candidate>> => {
   try {
-    const url = `${CONFIG.endpoint}/${CONFIG.bucket}/${CONFIG.indexFile}`
+    const command = new GetObjectCommand({
+      Bucket: CONFIG.bucket,
+      Key: CONFIG.indexFile,
+    })
+
+    const url = await getSignedUrl(s3Client, command, {
+      expiresIn: 3600, // 1 hour
+    })
+
+    // const url = `${CONFIG.endpoint}/${CONFIG.bucket}/${CONFIG.indexFile}`
 
     const response = await api.get(url)
 
