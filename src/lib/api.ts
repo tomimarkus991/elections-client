@@ -152,7 +152,7 @@ export const searchCandidates = (
   candidates: Array<Candidate>,
   query: string,
 ) => {
-  if (!query || query.length < 2) return new Map()
+  if (!query) return new Map()
 
   const fuse = new Fuse(candidates, {
     // keys: [

@@ -166,9 +166,9 @@ export const CandidatesTable: React.FC = () => {
                                     <TableBody>
                                       {candidates.map(
                                         (candidate: any, index: any) => {
-                                          if (index >= 2) {
-                                            return <></>
-                                          }
+                                          // if (index >= 2) {
+                                          //   return <></>
+                                          // }
                                           return (
                                             <TableRow
                                               key={`${candidate.name}-${index}`}
@@ -229,11 +229,11 @@ export const CandidatesTable: React.FC = () => {
       </div>
 
       {/* Pagination info */}
-      {!searchQuery && s3Candidates.length > 100 && (
+      {/* {!searchQuery && s3Candidates.length > 100 && (
         <p className="text-sm text-muted-foreground text-center">
           Showing first 100 candidates. Use search to find specific candidates.
         </p>
-      )}
+      )} */}
     </div>
   )
 }
